@@ -27,10 +27,24 @@ namespace test
 
             Utility.CreatePasswordHash("123", out byte[] passwordHash, out byte[] passwordSalt);
 
-            dbContext.Users.AddRange(new List<User>{
-            new User { Id = "sis", Name = "sis", PasswordHash = passwordHash, PasswordSalt = passwordSalt },
-            new User { Id = "puppy", Name = "puppy", PasswordHash = passwordHash, PasswordSalt = passwordSalt }
-            });
+            var usersList = new List<User>{
+                new User { Id = "sis", Email="sis@user.com", PasswordHash = passwordHash, PasswordSalt = passwordSalt },
+                new User { Id = "admin", Name = "admin", Email="admin@user.com", PasswordHash = passwordHash, PasswordSalt = passwordSalt }
+
+                };
+            for (int i = 0; i < 20; i++)
+            {
+                usersList.Add(new User
+                {
+                    Id = "000sis" + i + 123,
+                    Name = "Sis000" + i,
+                    PasswordHash = passwordHash,
+                    PasswordSalt = passwordSalt
+                });
+            }
+
+
+            dbContext.Users.AddRange(usersList);
 
             dbContext.SaveChangesAsync().GetAwaiter();
         }
