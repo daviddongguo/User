@@ -34,8 +34,6 @@ namespace test
                 Assert.That(passwordSalt, Is.Not.Empty);
             }
 
-
-
         }
     }
 }
