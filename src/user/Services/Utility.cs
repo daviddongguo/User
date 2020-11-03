@@ -14,7 +14,7 @@ namespace user.Services
             }
         }
 
-        public static string RandomString(int length)
+        public static string CreateRandomString(int length)
         {
             const string pool = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             var builder = new StringBuilder();

@@ -17,7 +17,7 @@ namespace test
             string result;
             for (int i = 0; i < 10; i++)
             {
-                result = Utility.RandomString(10);
+                result = Utility.CreateRandomString(10);
                 System.Console.WriteLine(result);
                 Assert.That(result, Is.Not.Empty);
             }

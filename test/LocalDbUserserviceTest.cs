@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Security.Claims;
 using NUnit.Framework;
 using user.Models;
 using user.Services;
@@ -72,8 +75,70 @@ namespace test
         {
             var result = _service.CreateToken(_service.GetUserByEmail(email).GetAwaiter().GetResult());
             Assert.That(result, Is.Not.Null);
-
             System.Console.WriteLine(result);
+
+            var tokenS = DecodeToken(result);
+            ((List<Claim>)tokenS.Claims).ForEach(a => System.Console.WriteLine(a.Type.ToString() + " " + a.Value));
+            var resultEmail = ((List<Claim>)tokenS.Claims).FirstOrDefault(a => a.Type.ToString().Equals("email"));
+            Assert.That(resultEmail.Value, Is.EqualTo(email));
+        }
+
+        [TestCase("sis@user.com", "123", true)]
+        [TestCase("sis@user.com", "l32", false)]
+        [TestCase("sis@user.com", "", false)]
+        public void VerifyPasswordHash(string email, string password, bool expectedValue)
+        {
+            // Arrange
+            var user = _service.GetUserByEmail(email).GetAwaiter().GetResult();
+
+            // Act
+            var result = _service.VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt);
+            Assert.That(result, Is.EqualTo(expectedValue));
+        }
+
+        [TestCase("sis@user.com", "l32", false)]
+        [TestCase("sis@user.com", "", false)]
+        [TestCase("six@user.com", "", false)]
+        public void Loginin_WhenFailed(string email, string password, bool expectedValue)
+        {
+            // Act
+            var result = _service.Login(email, password).GetAwaiter().GetResult();
+            Assert.That(result.Success, Is.EqualTo(expectedValue));
+            Assert.That(result.Message, Is.Not.Null);
+            System.Console.WriteLine(result.Message);
+        }
+
+        [TestCase("sis@user.com", "123", true)]
+        public void Loginin_WhenSuccessed(string email, string password, bool expectedValue)
+        {
+            // Act
+            var result = _service.Login(email, password).GetAwaiter().GetResult();
+            Assert.That(result.Success, Is.EqualTo(expectedValue));
+            Assert.That(result?.Data, Is.Not.Null);
+            System.Console.WriteLine(result?.Data);
+        }
+
+        [TestCase("david@wu.com", "123", true)]
+        [TestCase("sis@user.com", "123", false)]
+        public void Register(string email, string password, bool expectedValue)
+        {
+            // Arrange
+            var user = new User { Email = email };
+
+            // Act
+            var result = _service.Register(user, password).GetAwaiter().GetResult();
+            Assert.That(result?.Data != null, Is.EqualTo(expectedValue));
+            System.Console.WriteLine(result?.Message);
+        }
+
+
+
+
+        private JwtSecurityToken DecodeToken(string encodedJwt)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var tokenS = handler.ReadToken(encodedJwt) as JwtSecurityToken;
+            return tokenS;
         }
 
 

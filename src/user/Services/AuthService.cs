@@ -75,6 +75,7 @@ namespace user.Services
                 };
             };
             Utility.CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
+            toSaveUser.Id = Utility.CreateRandomString(12);
             toSaveUser.PasswordHash = passwordHash;
             toSaveUser.PasswordSalt = passwordSalt;
             await _context.Users.AddAsync(toSaveUser);
