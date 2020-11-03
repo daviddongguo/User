@@ -18,10 +18,9 @@ namespace user.Services
             Utility.CreatePasswordHash("123", out byte[] passwordHash, out byte[] passwordSalt);
 
             modelBuilder.Entity<User>().HasData(
-                new User { Id = "sis", Name = "sis", PasswordHash = passwordHash, PasswordSalt = passwordSalt },
-                new User { Id = "puppy", Name = "puppy", PasswordHash = passwordHash, PasswordSalt = passwordSalt }
+                new User { Id = "sis", Email="sis@user.com", PasswordHash = passwordHash, PasswordSalt = passwordSalt },
+                new User { Id = "admin", Name = "admin", Email="admin@user.com", PasswordHash = passwordHash, PasswordSalt = passwordSalt }
             );
-
         }
 
     }
