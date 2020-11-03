@@ -12,7 +12,7 @@ using user.Models;
 
 namespace user.Services
 {
-    public class AuthService
+    public class AuthService : IAuthService
     {
         private readonly UserDbContext _context;
         private readonly IConfiguration _configuration;
@@ -33,7 +33,7 @@ namespace user.Services
         }
         public async Task<User> GetUserByEmail(string email)
         {
-           return await _context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
+            return await _context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
         }
         public async Task<bool> IsUserExisted(string email)
         {
