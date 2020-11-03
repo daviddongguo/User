@@ -35,7 +35,7 @@ namespace user.Services
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
         }
-        public async Task<bool> IsUserExisted(string email)
+        public async Task<bool> IsEmailExisted(string email)
         {
             return await _context.Users.AnyAsync(u => u.Email.ToLower() == email.ToLower());
         }
@@ -66,7 +66,7 @@ namespace user.Services
         }
         public async Task<ServiceResponse<string>> Register(User toSaveUser, string password)
         {
-            if (await IsUserExisted(toSaveUser.Email))
+            if (await IsEmailExisted(toSaveUser.Email))
             {
                 return new ServiceResponse<string>
                 {

@@ -64,7 +64,7 @@ namespace test
         [TestCase("Sis@xxer.com", false)]
         public void IsUserExisted(string email, bool expectedValue)
         {
-            var result = _service.IsUserExisted(email).GetAwaiter().GetResult();
+            var result = _service.IsEmailExisted(email).GetAwaiter().GetResult();
             Assert.That(result == expectedValue);
 
             System.Console.WriteLine($"{email} : {result}");
