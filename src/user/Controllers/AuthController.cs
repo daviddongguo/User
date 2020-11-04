@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Mime;
@@ -8,6 +9,7 @@ using user.Services;
 
 namespace user.Controllers
 {
+    [Authorize(Roles = "admin")]
     [ApiController]
     [Route("[controller]")]
     public class AuthController : ControllerBase
@@ -19,12 +21,21 @@ namespace user.Controllers
             _service = service;
         }
 
+        [AllowAnonymous]
         [HttpGet("test")]
         public async Task<IActionResult> GetAllUsers()
         {
             return Ok(await _service.GetAllUsers());
         }
 
+        [AllowAnonymous]
+        [HttpGet("email/{email}")]
+        public async Task<IActionResult> GetUserByEmail(string email)
+        {
+            return Ok(await _service.GetUserByEmail(email));
+        }
+
+        [AllowAnonymous]
         [HttpPost("register")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -42,6 +53,7 @@ namespace user.Controllers
             return Created("", response.Data);
         }
 
+        [AllowAnonymous]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
@@ -49,7 +61,7 @@ namespace user.Controllers
             return NoContent();
 
         }
-
+        [AllowAnonymous]
         [HttpPost("login")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -65,6 +77,7 @@ namespace user.Controllers
             return Ok(response.Data);
         }
 
+        [AllowAnonymous]
         [HttpGet("IsEmailExisted/{email}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -78,8 +91,6 @@ namespace user.Controllers
             }
             return NoContent();
         }
-
-
 
     }
 }

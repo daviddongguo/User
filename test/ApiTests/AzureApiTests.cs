@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using NUnit.Framework;
 using RestSharp;
 using user.Dtos;
+using user.Models;
 
 namespace apiTests
 {
@@ -9,19 +11,52 @@ namespace apiTests
     public class AzureApiTests
     {
         private RestClient _client;
+        private readonly string _toRegisterEmail = "guest@email.ca";
         private readonly string baseUrl = "https://david-user-login.azurewebsites.net/";
-        //private readonly string baseUrl = "http://localhost:5000";
+        // private readonly string baseUrl = "http://localhost:5000";
 
-        [SetUp]
-        public void SetUp()
+        [OneTimeSetUp]
+        public void Init()
         {
             _client = new RestClient(baseUrl);
             _client.AddHandler("application/json", () => new RestSharp.Serialization.Json.JsonSerializer());
             _client.RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
+
+            DeleteUserByEmail(_toRegisterEmail);
+        }
+
+        [OneTimeTearDown]
+        public void Cleanup()
+        {
+        }
+
+        private void DeleteUserByEmail(string email)
+        {
+            // Find User
+            var request = new RestRequest("auth/email/" + email, Method.GET);
+            var response = _client.ExecuteAsync<User>(request).GetAwaiter().GetResult();
+            // var id = response.Data.Id;
+            var userContent = response.Content;
+
+            string id = null;
+            if (userContent != null)
+            {
+                var obj = JsonConvert.DeserializeObject<User>(userContent);
+                id = obj.Id;
+            }
+
+
+            // Delete User
+            if (id != null)
+            {
+                request = new RestRequest("auth/" + id, Method.DELETE);
+                var res = _client.ExecuteAsync(request).GetAwaiter().GetResult();
+            }
+
         }
 
         [TestCase(StatusCodes.Status200OK), Timeout(8000)]
-        public void TestUsers(int expectedstatusCode)
+        public void TestUsers(int expectedStatusCode)
         {
             // Arrange
             var request = new RestRequest("auth/test", Method.GET);
@@ -30,7 +65,7 @@ namespace apiTests
             var response = _client.ExecuteGetAsync(request).GetAwaiter().GetResult();
 
             // Assert
-            Assert.That((int)response.StatusCode == expectedstatusCode);
+            Assert.That((int)response.StatusCode, Is.EqualTo(expectedStatusCode));
             System.Console.WriteLine(response.ResponseUri);
             System.Console.WriteLine(response.StatusCode);
             System.Console.WriteLine(response.Content);
@@ -49,7 +84,7 @@ namespace apiTests
             var response = _client.ExecuteAsync(request).GetAwaiter().GetResult();
 
             // Assert
-            Assert.That((int)response.StatusCode == expectedStatusCode);
+            Assert.That((int)response.StatusCode, Is.EqualTo(expectedStatusCode));
             System.Console.WriteLine(response.ResponseUri);
             System.Console.WriteLine(response.StatusCode);
             System.Console.WriteLine(response.Content);
@@ -72,7 +107,7 @@ namespace apiTests
             var response = _client.ExecuteAsync(request).GetAwaiter().GetResult();
 
             // Assert
-            Assert.That((int)response.StatusCode == expectedStatusCode);
+            Assert.That((int)response.StatusCode, Is.EqualTo(expectedStatusCode));
             System.Console.WriteLine(response.ResponseUri);
             System.Console.WriteLine(response.StatusCode);
             System.Console.WriteLine(response.Content);
@@ -93,20 +128,20 @@ namespace apiTests
             var response = _client.ExecuteAsync(request).GetAwaiter().GetResult();
 
             // Assert
-            Assert.That((int)response.StatusCode == expectedStatusCode);
+            Assert.That((int)response.StatusCode, Is.EqualTo(expectedStatusCode));
             System.Console.WriteLine(response.ResponseUri);
             System.Console.WriteLine(response.StatusCode);
             System.Console.WriteLine(response.Content);
         }
 
-        [TestCase("guest@test.com", "323", StatusCodes.Status201Created)]
-        public void Register_WhenSuccess(string email, string password, int expectedStatusCode)
+        [TestCase("323", StatusCodes.Status201Created)]
+        public void Register_WhenSuccess(string password, int expectedStatusCode)
         {
             // Arrange
             var request = new RestRequest("auth/Register", Method.POST);
             request.AddJsonBody(new UserRegisterDto
             {
-                Email = email,
+                Email = _toRegisterEmail,
                 Password = password
             });
 
@@ -114,15 +149,7 @@ namespace apiTests
             var response = _client.ExecuteAsync(request).GetAwaiter().GetResult();
 
             // Assert
-            Assert.That((int)response.StatusCode == expectedStatusCode);
-            System.Console.WriteLine(response.ResponseUri);
-            System.Console.WriteLine(response.StatusCode);
-            System.Console.WriteLine(response.Content);
-
-            // Delete
-            var id = response.Content;
-            request = new RestRequest("auth/" + id.Substring(1, 12), Method.DELETE);
-            response = _client.ExecuteAsync(request).GetAwaiter().GetResult();
+            Assert.That((int)response.StatusCode, Is.EqualTo(expectedStatusCode));
             System.Console.WriteLine(response.ResponseUri);
             System.Console.WriteLine(response.StatusCode);
             System.Console.WriteLine(response.Content);
