@@ -36,7 +36,7 @@ namespace test
             _controller = new AuthController(_mockService.Object);
         }
 
-        [TestCase(400)]
+        [TestCase(200)]
         public void IsUserExisted_WhenEmailExists(int expectedStatusCode)
         {
             // Arrange
@@ -52,7 +52,7 @@ namespace test
 
         }
 
-        [TestCase(200)]
+        [TestCase(204)]
         public void IsUserExisted_WhenEmailDoesNotExist(int expectedStatusCode)
         {
             // Arrange
@@ -62,7 +62,7 @@ namespace test
             var response = _controller.IsEmailExisted("").GetAwaiter().GetResult();
 
             // Assert
-            var result = response as OkResult;
+            var result = response as NoContentResult;
             Assert.That(result.StatusCode == expectedStatusCode);
             PrintOut(response);
         }

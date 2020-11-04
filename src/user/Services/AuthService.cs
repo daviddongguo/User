@@ -85,6 +85,20 @@ namespace user.Services
                 Data = toSaveUser.Id,
             };
         }
+        public async Task Delete(string id)
+        {
+            var dbUser = await _context.Users.FirstOrDefaultAsync(u => u.Id.Equals(id));
+            if (dbUser == null)
+            {
+                return;
+            }
+            try
+            {
+                _context.Users.Remove(dbUser);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception) { }
+        }
 
         public bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
         {
@@ -128,5 +142,6 @@ namespace user.Services
 
             return tokenHandler.WriteToken(token);
         }
+
     }
 }

@@ -1,4 +1,6 @@
+using System.Net.Mime;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using user.Dtos;
@@ -25,7 +27,10 @@ namespace user.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(UserRegisterDto toRegisterUser)
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Register([FromBody] UserRegisterDto toRegisterUser)
         {
             var response = await _service.Register(
                 new User { Email = toRegisterUser.Email }, toRegisterUser.Password
@@ -38,8 +43,18 @@ namespace user.Controllers
             return Created("", response.Data);
         }
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(string id){
+            await _service.Delete(id);
+            return NoContent();
+
+        }
+
         [HttpPost("login")]
-        public async Task<IActionResult> Login(UserLoginDto toLoginUser)
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Login([FromBody] UserLoginDto toLoginUser)
         {
             var response = await _service.Login(toLoginUser.Email, toLoginUser.Password);
 
@@ -50,16 +65,18 @@ namespace user.Controllers
             return Ok(response.Data);
         }
 
-        [HttpPost("IsEmailExisted")]
+        [HttpGet("IsEmailExisted/{email}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> IsEmailExisted(string email)
         {
             var response = await _service.IsEmailExisted(email);
 
             if (response)
             {
-                return BadRequest($"{email} already exists!");
+                return Ok($"Yes, {email} already exists!");
             }
-            return Ok();
+            return NoContent();
         }
 
 
