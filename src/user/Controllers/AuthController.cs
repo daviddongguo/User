@@ -1,8 +1,7 @@
-using System.Net.Mime;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
+using System.Net.Mime;
+using System.Threading.Tasks;
 using user.Dtos;
 using user.Models;
 using user.Services;
@@ -44,7 +43,8 @@ namespace user.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(string id){
+        public async Task<IActionResult> Delete(string id)
+        {
             await _service.Delete(id);
             return NoContent();
 

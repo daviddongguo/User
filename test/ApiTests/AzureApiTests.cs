@@ -61,7 +61,7 @@ namespace apiTests
         public void Login(string email, string password, int expectedStatusCode)
         {
             // Arrange
-            var request = new RestRequest("auth/login" , Method.POST);
+            var request = new RestRequest("auth/login", Method.POST);
             request.AddJsonBody(new UserLoginDto
             {
                 Email = email,
@@ -121,7 +121,7 @@ namespace apiTests
 
             // Delete
             var id = response.Content;
-            request = new RestRequest("auth/" + id.Substring(1,12), Method.DELETE);
+            request = new RestRequest("auth/" + id.Substring(1, 12), Method.DELETE);
             response = _client.ExecuteAsync(request).GetAwaiter().GetResult();
             System.Console.WriteLine(response.ResponseUri);
             System.Console.WriteLine(response.StatusCode);

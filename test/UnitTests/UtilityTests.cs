@@ -29,7 +29,7 @@ namespace test
             for (int i = 0; i < 10; i++)
             {
                 Utility.CreatePasswordHash(i.ToString(), out byte[] passwordHash, out byte[] passwordSalt);
-                System.Console.WriteLine($"{ i} : {Convert.ToBase64String(passwordHash).Substring(0,10)} : {Convert.ToBase64String(passwordSalt).Substring(0,10)}");
+                System.Console.WriteLine($"{ i} : {Convert.ToBase64String(passwordHash).Substring(0, 10)} : {Convert.ToBase64String(passwordSalt).Substring(0, 10)}");
                 Assert.That(passwordHash, Is.Not.Empty);
                 Assert.That(passwordSalt, Is.Not.Empty);
             }

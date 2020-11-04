@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using NUnit.Framework;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
-using NUnit.Framework;
 using user.Models;
 using user.Services;
 
@@ -54,7 +54,7 @@ namespace test
         public void GetUserByEmail(string email, bool expectedValue)
         {
             var result = _service.GetUserByEmail(email).GetAwaiter().GetResult();
-            Assert.That(result !=null, Is.EqualTo(expectedValue));
+            Assert.That(result != null, Is.EqualTo(expectedValue));
 
             System.Console.WriteLine($"{email} : {result?.Email}");
         }
