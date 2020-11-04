@@ -24,17 +24,19 @@ jobs:
       env:
         SUPER_SECRET: ${{ secrets.appsetingsfile }}
       run: echo "$SUPER_SECRET" >./src/user/appsettings.json &&
-        echo "$SUPER_SECRET" >./test/appsettings.json
+        echo "$SUPER_SECRET" >./test/UnitTests/appsettings.json
 
     - name: Unit Test
       run: dotnet test -l "console;verbosity=detailed"
-      working-directory: ./test
+      working-directory: ./test/UnitTests
 
     - name: Build with dotnet
       run: dotnet build --configuration Release
+      working-directory: ./src/user
 
     - name: dotnet publish
       run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+      working-directory: ./src/user
 
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
