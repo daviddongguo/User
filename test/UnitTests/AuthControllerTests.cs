@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Moq;
 using NUnit.Framework;
 using System;
@@ -36,38 +38,38 @@ namespace test
             _controller = new AuthController(_mockService.Object);
         }
 
-        [TestCase(200)]
+        [TestCase(StatusCodes.Status200OK)]
         public void IsUserExisted_WhenEmailExists(int expectedStatusCode)
         {
             // Arrange
             _mockService.Setup(s => s.IsEmailExisted(It.IsAny<string>())).Returns(Task.FromResult(true));
 
             // Act
-            var response = _controller.IsEmailExisted("").GetAwaiter().GetResult();
+            var actionResult = _controller.IsEmailExisted("").GetAwaiter().GetResult();
 
             // Assert
-            var result = response as ObjectResult;
-            Assert.That(result.StatusCode == expectedStatusCode);
-            PrintOut(response);
+            var statusCodeResult = actionResult as IStatusCodeActionResult;
+            Assert.That(statusCodeResult.StatusCode, Is.EqualTo(expectedStatusCode));
+            PrintOut(actionResult);
 
         }
 
-        [TestCase(204)]
+        [TestCase(StatusCodes.Status204NoContent)]
         public void IsUserExisted_WhenEmailDoesNotExist(int expectedStatusCode)
         {
             // Arrange
             _mockService.Setup(s => s.IsEmailExisted(It.IsAny<string>())).Returns(Task.FromResult(false));
 
             // Act
-            var response = _controller.IsEmailExisted("").GetAwaiter().GetResult();
+            var actionResult = _controller.IsEmailExisted("").GetAwaiter().GetResult();
 
             // Assert
-            var result = response as NoContentResult;
-            Assert.That(result.StatusCode == expectedStatusCode);
-            PrintOut(response);
+            var statusCodeResult = actionResult as IStatusCodeActionResult;
+            Assert.That(statusCodeResult.StatusCode == expectedStatusCode);
+            PrintOut(actionResult);
         }
 
-        [TestCase(true, 201)]
+        [TestCase(true, StatusCodes.Status201Created)]
         public void Register_WhenSuccess(bool serviceResponse, int expectedStatusCode)
         {
             // Arrange
@@ -80,15 +82,15 @@ namespace test
                    }));
 
             // Act
-            var response = _controller.Register(new UserRegisterDto()).GetAwaiter().GetResult();
+            var actionResult = _controller.Register(new UserRegisterDto()).GetAwaiter().GetResult();
 
             // Assert
-            var result = response as CreatedResult;
-            Assert.That(result.StatusCode == expectedStatusCode);
-            PrintOut(response);
+            var statusCodeResult = actionResult as IStatusCodeActionResult;
+            Assert.That(statusCodeResult.StatusCode == expectedStatusCode);
+            PrintOut(actionResult);
         }
 
-        [TestCase(false, 400)]
+        [TestCase(false, StatusCodes.Status400BadRequest)]
         public void Register_WhenFailed(bool serviceResponse, int expectedStatusCode)
         {
             // Arrange
@@ -101,16 +103,16 @@ namespace test
                    }));
 
             // Act
-            var response = _controller.Register(new UserRegisterDto()).GetAwaiter().GetResult();
+            var actionResult = _controller.Register(new UserRegisterDto()).GetAwaiter().GetResult();
 
             // Assert
-            var result = response as ObjectResult;
-            Assert.That(result.StatusCode == expectedStatusCode);
-            PrintOut(response);
+            var statusCodeResult = actionResult as IStatusCodeActionResult;
+            Assert.That(statusCodeResult.StatusCode == expectedStatusCode);
+            PrintOut(actionResult);
         }
 
 
-        [TestCase(false, 400)]
+        [TestCase(false, StatusCodes.Status400BadRequest)]
         public void Login_WhenFailed(bool serviceResponse, int expectedStatusCode)
         {
             // Arrange
@@ -123,15 +125,15 @@ namespace test
                    }));
 
             // Act
-            var response = _controller.Login(new UserLoginDto()).GetAwaiter().GetResult();
+            var actionResult = _controller.Login(new UserLoginDto()).GetAwaiter().GetResult();
 
             // Assert
-            var result = response as ObjectResult;
-            Assert.That(result.StatusCode == expectedStatusCode);
-            PrintOut(response);
+            var statusCodeResult = actionResult as IStatusCodeActionResult;
+            Assert.That(statusCodeResult.StatusCode == expectedStatusCode);
+            PrintOut(actionResult);
         }
 
-        [TestCase(true, 200)]
+        [TestCase(true, StatusCodes.Status200OK)]
         public void Login_WhenSuccess(bool serviceResponse, int expectedStatusCode)
         {
             // Arrange
@@ -144,13 +146,13 @@ namespace test
                    }));
 
             // Act
-            var response = _controller.Login(new UserLoginDto()).GetAwaiter().GetResult();
+            var actionResult = _controller.Login(new UserLoginDto()).GetAwaiter().GetResult();
 
             // Assert
 
-            var result = response as OkObjectResult;
-            Assert.That(result.StatusCode == expectedStatusCode);
-            PrintOut(response);
+            var statusCodeResult = actionResult as IStatusCodeActionResult;
+            Assert.That(statusCodeResult.StatusCode == expectedStatusCode);
+            PrintOut(actionResult);
         }
 
 

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using NUnit.Framework;
 using RestSharp;
 using user.Dtos;
@@ -19,7 +20,7 @@ namespace apiTests
             _client.RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
         }
 
-        [TestCase(200), Timeout(8000)]
+        [TestCase(StatusCodes.Status200OK), Timeout(8000)]
         public void TestUsers(int expectedstatusCode)
         {
             // Arrange
@@ -35,10 +36,10 @@ namespace apiTests
             System.Console.WriteLine(response.Content);
         }
 
-        [TestCase("aaabbddddddd", 204)]
-        [TestCase("sis@user.com", 200)]
-        [TestCase("Sis@user.com", 200)]
-        [TestCase("Sis@xxer.com", 204)]
+        [TestCase("aaabbddddddd", StatusCodes.Status204NoContent)]
+        [TestCase("sis@user.com", StatusCodes.Status200OK)]
+        [TestCase("Sis@user.com", StatusCodes.Status200OK)]
+        [TestCase("Sis@xxer.com", StatusCodes.Status204NoContent)]
         public void IsUserExisted(string email, int expectedStatusCode)
         {
             // Arrange
@@ -54,9 +55,9 @@ namespace apiTests
             System.Console.WriteLine(response.Content);
         }
 
-        [TestCase("sis@user.com", "123", 200)]
-        [TestCase("sis@user.com", "133", 400)]
-        [TestCase("sis@usxx.com", "123", 400)]
+        [TestCase("sis@user.com", "123", StatusCodes.Status200OK)]
+        [TestCase("sis@user.com", "133", StatusCodes.Status400BadRequest)]
+        [TestCase("sis@usxx.com", "123", StatusCodes.Status400BadRequest)]
         public void Login(string email, string password, int expectedStatusCode)
         {
             // Arrange
@@ -77,7 +78,7 @@ namespace apiTests
             System.Console.WriteLine(response.Content);
         }
 
-        [TestCase("sis@user.com", "323", 400)]
+        [TestCase("sis@user.com", "323", StatusCodes.Status400BadRequest)]
         public void Register_WhenFailed(string email, string password, int expectedStatusCode)
         {
             // Arrange
@@ -98,7 +99,7 @@ namespace apiTests
             System.Console.WriteLine(response.Content);
         }
 
-        [TestCase("guest@test.com", "323", 201)]
+        [TestCase("guest@test.com", "323", StatusCodes.Status201Created)]
         public void Register_WhenSuccess(string email, string password, int expectedStatusCode)
         {
             // Arrange
@@ -118,18 +119,13 @@ namespace apiTests
             System.Console.WriteLine(response.StatusCode);
             System.Console.WriteLine(response.Content);
 
-            // DeleteRT
+            // Delete
             var id = response.Content;
             request = new RestRequest("auth/" + id.Substring(1,12), Method.DELETE);
             response = _client.ExecuteAsync(request).GetAwaiter().GetResult();
             System.Console.WriteLine(response.ResponseUri);
             System.Console.WriteLine(response.StatusCode);
             System.Console.WriteLine(response.Content);
-
-
         }
-
-
-
     }
 }
