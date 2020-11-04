@@ -64,7 +64,7 @@ namespace test
 
             // Assert
             var statusCodeResult = actionResult as IStatusCodeActionResult;
-            Assert.That(statusCodeResult.StatusCode == expectedStatusCode);
+            Assert.That(statusCodeResult.StatusCode, Is.EqualTo(expectedStatusCode));
             PrintOut(actionResult);
         }
 
@@ -85,7 +85,6 @@ namespace test
 
             // Assert
             var statusCodeResult = actionResult as IStatusCodeActionResult;
-            Assert.That(statusCodeResult.StatusCode == expectedStatusCode);
             PrintOut(actionResult);
         }
 
@@ -106,7 +105,7 @@ namespace test
 
             // Assert
             var statusCodeResult = actionResult as IStatusCodeActionResult;
-            Assert.That(statusCodeResult.StatusCode == expectedStatusCode);
+            Assert.That(statusCodeResult.StatusCode, Is.EqualTo(expectedStatusCode));
             PrintOut(actionResult);
         }
 
@@ -128,7 +127,7 @@ namespace test
 
             // Assert
             var statusCodeResult = actionResult as IStatusCodeActionResult;
-            Assert.That(statusCodeResult.StatusCode == expectedStatusCode);
+            Assert.That(statusCodeResult.StatusCode, Is.EqualTo(expectedStatusCode));
             PrintOut(actionResult);
         }
 
@@ -148,9 +147,8 @@ namespace test
             var actionResult = _controller.Login(new UserLoginDto()).GetAwaiter().GetResult();
 
             // Assert
-
             var statusCodeResult = actionResult as IStatusCodeActionResult;
-            Assert.That(statusCodeResult.StatusCode == expectedStatusCode);
+            Assert.That(statusCodeResult.StatusCode, Is.EqualTo(expectedStatusCode));
             PrintOut(actionResult);
         }
 
@@ -162,8 +160,6 @@ namespace test
             str = str.Length > len ? str.Substring(0, len) : str;
             System.Console.WriteLine(str);
         }
-
-
         private string PrettyJson(string unPrettyJson)
         {
             var options = new JsonSerializerOptions()
@@ -175,9 +171,5 @@ namespace test
 
             return JsonSerializer.Serialize(jsonElement, options);
         }
-
-
-
-
     }
 }
