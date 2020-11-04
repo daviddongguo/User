@@ -20,6 +20,16 @@ jobs:
       with:
         dotnet-version: '3.1.102'
 
+    - name: Set up Environment
+      env:
+        SUPER_SECRET: ${{ secrets.appsetingsfile }}
+      run: echo "$SUPER_SECRET" >./src/user/appsettings.json &&
+        echo "$SUPER_SECRET" >./test/appsettings.json
+
+    - name: Unit Test
+      run: dotnet watch test -l "console;verbosity=detailed"
+      working-directory: ./tes
+
     - name: Build with dotnet
       run: dotnet build --configuration Release
 
@@ -32,4 +42,4 @@ jobs:
         app-name: 'david-user-login'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_e56e4f9ba1c34dcdbd89801364ccafa9 }}
-        package: ${{env.DOTNET_ROOT}}/myapp
+        package: ${{env.DOTNET_ROOT}}/myapp 
