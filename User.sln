@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30611.23
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "user", "src\user\user.csproj", "{CFA1BF78-88DC-43AD-93CC-90D91551B11B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "david.user.login.api", "src\user\david.user.login.api.csproj", "{CFA1BF78-88DC-43AD-93CC-90D91551B11B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "test", "test\test.csproj", "{73A684BF-D0E2-4E28-AFB2-17A4D99D837A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "david.user.login.tests", "test\david.user.login.tests.csproj", "{73A684BF-D0E2-4E28-AFB2-17A4D99D837A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
