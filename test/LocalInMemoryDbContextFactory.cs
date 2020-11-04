@@ -29,6 +29,7 @@ namespace test
 
             var usersList = new List<User>{
                 new User { Id = "sis", Email="sis@user.com", PasswordHash = passwordHash, PasswordSalt = passwordSalt },
+                new User { Id = "sisempty", Email="", PasswordHash = passwordHash, PasswordSalt = passwordSalt },
                 new User { Id = "admin", Name = "admin", Email="admin@user.com", PasswordHash = passwordHash, PasswordSalt = passwordSalt }
 
                 };

@@ -9,7 +9,7 @@ using user.Services;
 namespace test
 {
     [TestFixture]
-    public class LocalDbUserserviceTest
+    public class UserServiceTest
     {
         private AuthService _service;
 
@@ -61,6 +61,7 @@ namespace test
 
         [TestCase("sis@user.com", true)]
         [TestCase("Sis@user.com", true)]
+        [TestCase("", true)]
         [TestCase("Sis@xxer.com", false)]
         public void IsUserExisted(string email, bool expectedValue)
         {
@@ -99,7 +100,7 @@ namespace test
         [TestCase("sis@user.com", "l32", false)]
         [TestCase("sis@user.com", "", false)]
         [TestCase("six@user.com", "", false)]
-        public void Loginin_WhenFailed(string email, string password, bool expectedValue)
+        public void Login_WhenFailed(string email, string password, bool expectedValue)
         {
             // Act
             var result = _service.Login(email, password).GetAwaiter().GetResult();
@@ -109,7 +110,7 @@ namespace test
         }
 
         [TestCase("sis@user.com", "123", true)]
-        public void Loginin_WhenSuccessed(string email, string password, bool expectedValue)
+        public void Login_WhenSuccess(string email, string password, bool expectedValue)
         {
             // Act
             var result = _service.Login(email, password).GetAwaiter().GetResult();
@@ -120,6 +121,7 @@ namespace test
 
         [TestCase("david@wu.com", "123", true)]
         [TestCase("sis@user.com", "123", false)]
+        [TestCase("", "123", false)]
         public void Register(string email, string password, bool expectedValue)
         {
             // Arrange
