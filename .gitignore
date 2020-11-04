@@ -351,3 +351,4 @@ MigrationBackup/
 
 # User defined
 test/appsettings.json
+src/user/appsettings.json
