@@ -24,11 +24,11 @@ jobs:
       env:
         SUPER_SECRET: ${{ secrets.appsetingsfile }}
       run: echo "$SUPER_SECRET" >./src/user/appsettings.json &&
-        echo "$SUPER_SECRET" >./test/appsettings.json
+        echo "$SUPER_SECRET" >./test/UnitTests/appsettings.json
 
     - name: Unit Test
       run: dotnet test -l "console;verbosity=detailed"
-      working-directory: ./test
+      working-directory: ./test/UnitTests
 
     - name: Build with dotnet
       run: dotnet build --configuration Release
