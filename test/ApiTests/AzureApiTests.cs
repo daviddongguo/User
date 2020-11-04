@@ -8,8 +8,8 @@ namespace apiTests
     public class AzureApiTests
     {
         private RestClient _client;
-        //private readonly string baseUrl = "https://david-user-login.azurewebsites.net/";
-        private readonly string baseUrl = "http://localhost:5000";
+        private readonly string baseUrl = "https://david-user-login.azurewebsites.net/";
+        //private readonly string baseUrl = "http://localhost:5000";
 
         [SetUp]
         public void SetUp()
