@@ -40,7 +40,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\user\david.user.login.api.csproj" />
+    <ProjectReference Include="..\..\src\user\david.user.login.api.csproj" />
   </ItemGroup>
 
 </Project>
