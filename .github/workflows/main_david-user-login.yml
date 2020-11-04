@@ -45,3 +45,7 @@ jobs:
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_e56e4f9ba1c34dcdbd89801364ccafa9 }}
         package: ${{env.DOTNET_ROOT}}/myapp 
+        
+    - name: End user Test
+      run: dotnet test -l "console;verbosity=detailed"
+      working-directory: ./test/ApiTests
