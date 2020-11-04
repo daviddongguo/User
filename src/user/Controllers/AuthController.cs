@@ -8,7 +8,7 @@ using user.Services;
 namespace user.Controllers
 {
     [ApiController]
-    [Route("[controller")]
+    [Route("[controller]")]
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _service;
@@ -16,6 +16,12 @@ namespace user.Controllers
         public AuthController(IAuthService service)
         {
             _service = service;
+        }
+
+        [HttpGet("test")]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            return Ok(await _service.GetAllUsers());
         }
 
         [HttpPost("register")]
