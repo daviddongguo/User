@@ -36,10 +36,10 @@ namespace apiTests
             var request = new RestRequest("auth/email/" + email, Method.GET);
             var response = _client.ExecuteAsync<User>(request).GetAwaiter().GetResult();
             // var id = response.Data.Id;
-            var userContent = response.Content;
+            var userContent = response?.Content;
 
             string id = null;
-            if (userContent != null)
+            if (!string.IsNullOrWhiteSpace(userContent))
             {
                 var obj = JsonConvert.DeserializeObject<User>(userContent);
                 id = obj.Id;
